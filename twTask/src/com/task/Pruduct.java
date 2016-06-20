@@ -7,6 +7,7 @@ public abstract class Pruduct {
 	String category;
 	String subCategory;
 	double price;
+	//it changed
 	/**  
 	 * @return the barcode
 	 */
