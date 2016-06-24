@@ -75,18 +75,14 @@ public class PriceProcess {
 	 */
 	public String calcautePrice(List<String> input, Set<String> enjoyProduct){
 		String result;
-		Set<String> discountProduct = new HashSet<>();
-		for(String str : input){
-			discountProduct.add(str);
-		}	
+//		Set<String> discountProduct = new HashSet<>();
+//		for(String str : input){
+//			discountProduct.add(str);
+//		}	
 		Map<String, Double> buy = parseInput(input);
 		result = discount.calculate(buy, map, enjoyProduct);
 		return result;
 	}
-	
-
-	
-
 	
 	/**
 	 * Change discounts, waiting for add.

@@ -10,7 +10,8 @@ public class SwingConsole {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				// f.setTitle(f.getClass().getSimpleName());
+//				f.setTitle(f.getClass().getSimpleName());
+				f.setTitle("收银机系统_version_0.0");
 				f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				f.setSize(width, height);
 				f.setVisible(true);

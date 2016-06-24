@@ -35,98 +35,77 @@ public class Gui extends JFrame {
 	private JLabel inputLabel = new JLabel("商品条形码列表：");
 	private JLabel outputLabel = new JLabel("商品价格清单：");
 	private JLabel discountLabel = new JLabel("参加优惠条形码：");
-	private JTextArea  inputArea = new JTextArea(4,20);
-	private JTextArea  outputArea = new JTextArea(8,20);
-	private JTextArea  discountArea = new JTextArea(4,20);
+	private JTextField inputArea = new JTextField(60);
+	private JTextArea outputArea = new JTextArea(8, 60);
+	private JTextField discountArea = new JTextField(60);
 	private String input;
 	private String output;
 	private String discount;
-	
-	//Save  which products take part in discounts. 
+
+	// Save which products take part in discounts.
 	private Set<String> enjoyProduct = new HashSet<>();
-	
+	private List<String> inputBarcode = new ArrayList<>();
+
 	public Gui() {
-		input="ITEM000001,ITEM000001,ITEM000001,ITEM000001,"
-				+ "ITEM000001,ITEM000003-2,ITEM000005,ITEM000005,ITEM000005";
-		output="";
-		discount="ITEM000001,ITEM000002,ITEM000003,ITEM000004,ITEM000005";
+		//ITEM000001,ITEM000001,ITEM000001,ITEM000001,ITEM000001,ITEM000003-2,ITEM000004,ITEM000004,ITEM000004
+		output = "";
+		input = "";	
+		discount = "";
+
 		inputArea.setText(output);
-		outputArea.setText(output);
 		discountArea.setText(discount);
-		inputArea.getDocument().addDocumentListener(new DocumentListener(){
+		outputArea.setText(output);		
+		//output linewrap
+		outputArea.setLineWrap(true); 
+		inputArea.addActionListener(new ActionListener() {
+
 			@Override
-			public void insertUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub			
-			}
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub			
-			}
-			@Override
-			public void changedUpdate(DocumentEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				int length = e.getDocument().getLength();
-				try {
-					input = e.getDocument().getText(0, length);
-				} catch (BadLocationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				input = ((JTextField) e.getSource()).getText();
 				List<String> list = new ArrayList<>();
 				String[] content = input.split(",");
-				for(int i=0;i<content.length;i++){
+				for (int i = 0; i < content.length; i++) {
 					list.add(content[i]);
 				}
-				output = priceProcess.calcautePrice(list, enjoyProduct);
+				inputBarcode = list;
+				output = priceProcess.calcautePrice(inputBarcode, enjoyProduct);
 				outputArea.setText(output);
-			}		
+			}
+
 		});
-		discountArea.getDocument().addDocumentListener(new DocumentListener(){
+
+		discountArea.addActionListener(new ActionListener() {
 			@Override
-			public void insertUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub				
-			}
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub				
-			}
-			@Override
-			public void changedUpdate(DocumentEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				int length = e.getDocument().getLength();
-				try {
-					discount = e.getDocument().getText(0, length);
-				} catch (BadLocationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				List<String> list = new ArrayList<>();
+				discount = ((JTextField) e.getSource()).getText();
 				String[] content = discount.split(",");
-				for(int i=0;i<content.length;i++){
-					enjoyProduct.add(content[i]);
+				Set<String> set = new HashSet<>();
+				for (int i = 0; i < content.length; i++) {
+					set.add(content[i]);
 				}
-				output = priceProcess.calcautePrice(list,enjoyProduct);
+				enjoyProduct = set;
+				output = priceProcess.calcautePrice(inputBarcode, enjoyProduct);
 				outputArea.setText(output);
-			}		
+			}
+
 		});
 		FlowLayout layout = new FlowLayout();
-	    setLayout(layout);
+		setLayout(layout);
 		add(inputLabel);
 		add(inputArea);
+		add(discountLabel);
+		add(discountArea);
 		add(outputLabel);
 		add(outputArea);
-		add(discountLabel);
-		add(discountArea);		
 	}
 
-	
 	public static void startSystem() {
 		Dimension screensize = tk.getScreenSize();
-		int width = screensize.width/2;
-		int height = screensize.height/2;
-		
+		int width = 700;
+		int height = 400;
+
 		run(new Gui(), width, height);
 	}
 }
-
-
